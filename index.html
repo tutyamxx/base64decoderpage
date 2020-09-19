@@ -22,7 +22,8 @@
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script>
-const DefaultNoImage =  "https://icons.iconarchive.com/icons/hopstarter/soft-scraps/128/File-Delete-icon.png";
+const DefaultNoImage =  "./images/noimage.png";
+
 let FormatImageSrc = "";
 
 $(document).ready(function ()
@@ -30,7 +31,7 @@ $(document).ready(function ()
     $("#Text-Code-Area").focus().select();
     $("#Preview-Image").attr("src", DefaultNoImage);
 
-    $("#Text-Code-Area").on("change keyup paste", function()
+    $("#Text-Code-Area").on("change keydown paste", function()
     {
         setTimeout(function () { DecodeImage(); }, 100);
     });
@@ -40,30 +41,51 @@ function DecodeImage()
 {
     let GetImageType = $("#Text-Code-Area").val();
 
-    switch(GetImageType.charAt(0))
+    if(isBase64(GetImageType))
     {
-        case "i":
-            FormatImageSrc = `data:image/png;base64, ${GetImageType}`;
-            break;
+        switch(GetImageType.charAt(0))
+        {
+            case "i":
+                FormatImageSrc = `data:image/png;base64, ${GetImageType}`;
+                break;
 
-        case "/":
-            FormatImageSrc = `data:image/jpeg;base64, ${GetImageType}`;
-            break;
+            case "/":
+                FormatImageSrc = `data:image/jpeg;base64, ${GetImageType}`;
+                break;
 
-        case "R":
-            FormatImageSrc = `data:image/gif;base64, ${GetImageType}`;
-            break;
+            case "R":
+                FormatImageSrc = `data:image/gif;base64, ${GetImageType}`;
+                break;
 
-        case "Q":
-            FormatImageSrc = `data:image/bmp;base64, ${GetImageType}`;
-            break;
+            case "Q":
+                FormatImageSrc = `data:image/bmp;base64, ${GetImageType}`;
+                break;
 
-        default:
-            FormatImageSrc = DefaultNoImage;
-            break;
+            default:
+                FormatImageSrc = DefaultNoImage;
+                break;
+        }
+
+        $.when($("#Preview-Image").attr("src", FormatImageSrc)).then(function () { $("#Text-Code-Area").blur(); });
     }
 
-    $.when($("#Preview-Image").attr("src", FormatImageSrc)).then(function() { $("#Text-Code-Area").blur(); });
+    else
+    {
+        $("#Preview-Image").attr("src", DefaultNoImage);
+    }
+};
+
+function isBase64(str)
+{
+    try
+    {
+        return btoa(atob(str)) === str;
+    }
+
+    catch(err)
+    {
+        return false;
+    }
 };
 </script>
 
