@@ -31,7 +31,17 @@ $(document).ready(function ()
     $("#Text-Code-Area").focus().select();
     $("#Preview-Image").attr("src", DefaultNoImage);
 
-    $("#Text-Code-Area").on("change keydown paste", function()
+    $("#Text-Code-Area").on("focus", function ()
+    {
+        $("#Text-Code-Area").val("");
+
+        if($("#Text-Code-Area").val() === "")
+        {
+            $("#Preview-Image").attr("src", DefaultNoImage);
+        }
+    });
+
+    $("#Text-Code-Area").on("change paste", function()
     {
         setTimeout(function () { DecodeImage(); }, 100);
     });
