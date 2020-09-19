@@ -63,18 +63,7 @@ function DecodeImage()
             break;
     }
 
-    $.when($("#Preview-Image").attr("src", FormatImageSrc)).then(function()
-    {
-        $("#Text-Code-Area").blur();
-
-        const iWidth = $("#Preview-Image").width();
-        const iHeight = $("#Preview-Image").height();
-
-        if(iWidth > 500 && iHeight > 500)
-        {
-            $("#Preview-Image").css({ "width" : "500px", "height" : "500px" });
-        }
-    });
+    $.when($("#Preview-Image").attr("src", FormatImageSrc)).then(function() { $("#Text-Code-Area").blur(); });
 };
 </script>
 
