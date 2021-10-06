@@ -1,75 +1,58 @@
-const DefaultNoImage = "./images/noimage.png";
+const defaultNoImage = "./images/noimage.png";
 
-let FormatImageSrc = "";
+let formatImageSrc = "";
 
-$(document).ready(function ()
-{
+$(document).ready(function () {
     $("#Text-Code-Area").focus().select();
-    $("#Preview-Image").attr("src", DefaultNoImage);
+    $("#Preview-Image").attr("src", defaultNoImage);
 
-    $("#Text-Code-Area").on("focus", function()
-    {
+    $("#Text-Code-Area").on("focus", function() {
         $("#Text-Code-Area").val("");
 
-        if($("#Text-Code-Area").val() === "")
-        {
-            $("#Preview-Image").attr("src", DefaultNoImage);
-        }
+        if ($("#Text-Code-Area").val() === "") $("#Preview-Image").attr("src", defaultNoImage);
     });
 
-    $("#Text-Code-Area").on("change paste", function()
-    {
+    $("#Text-Code-Area").on("change paste", function() {
         setTimeout(function () { DecodeImage(); }, 100);
     });
 });
 
-function DecodeImage()
-{
-    let GetImageType = $("#Text-Code-Area").val();
+function DecodeImage() {
+    let getImageType = $("#Text-Code-Area").val();
 
-    if(isBase64(GetImageType))
-    {
-        switch(GetImageType.charAt(0))
-        {
+    if (isBase64(getImageType)) {
+        switch (getImageType.charAt(0)) {
             case "i":
-                FormatImageSrc = `data:image/png;base64, ${GetImageType}`;
+                formatImageSrc = `data:image/png;base64, ${getImageType}`;
                 break;
 
             case "/":
-                FormatImageSrc = `data:image/jpeg;base64, ${GetImageType}`;
+                formatImageSrc = `data:image/jpeg;base64, ${getImageType}`;
                 break;
 
             case "R":
-                FormatImageSrc = `data:image/gif;base64, ${GetImageType}`;
+                formatImageSrc = `data:image/gif;base64, ${getImageType}`;
                 break;
 
             case "Q":
-                FormatImageSrc = `data:image/bmp;base64, ${GetImageType}`;
+                formatImageSrc = `data:image/bmp;base64, ${getImageType}`;
                 break;
 
             default:
-                FormatImageSrc = DefaultNoImage;
+                formatImageSrc = defaultNoImage;
                 break;
         }
 
-        $.when($("#Preview-Image").attr("src", FormatImageSrc)).then(function () { $("#Text-Code-Area").blur(); });
+        $.when($("#Preview-Image").attr("src", formatImageSrc)).then(function () { $("#Text-Code-Area").blur(); });
     }
 
-    else
-    {
-        $("#Preview-Image").attr("src", DefaultNoImage);
-    }
+    else $("#Preview-Image").attr("src", defaultNoImage);
 };
 
-function isBase64(str)
-{
-    try
-    {
+function isBase64(str) {
+    try {
         return btoa(atob(str)) === str;
-    }
-
-    catch(err)
-    {
+    } catch (err) {
         return false;
     }
 };
